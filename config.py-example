@@ -1,0 +1,10 @@
+TWEET_LEN = 140 
+SHORT_URL_LEN = 23 
+ELLIPSIS = " ..."
+TAG = "#quote "
+
+# twitter api
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
+ACCESS_TOKEN = '' 
+ACCESS_SECRET = ''
