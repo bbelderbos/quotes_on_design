@@ -1,6 +1,6 @@
+#!/usr/bin/env python
 import HTMLParser
 import logging
-from pprint import pprint as pp
 import re
 import requests
 import sys
