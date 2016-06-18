@@ -2,6 +2,7 @@ TWEET_LEN = 140
 SHORT_URL_LEN = 23 
 ELLIPSIS = " ..."
 TAG = "#quote "
+LOGFILE = "quotes.log"
 
 # twitter api
 CONSUMER_KEY = ''

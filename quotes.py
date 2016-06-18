@@ -1,4 +1,5 @@
 import HTMLParser
+import logging
 from pprint import pprint as pp
 import re
 import requests
@@ -8,6 +9,11 @@ import tweepy
 from config import *
 
 html_parser = HTMLParser.HTMLParser()
+logging.basicConfig(filename=LOGFILE,
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
 
 class TweetTooLong(Exception):
   def __init__(self, value):
@@ -16,10 +22,12 @@ class TweetTooLong(Exception):
     return repr(self.value)
 
 def get_quote(url):
-  r = requests.get(url)
+  try:
+    r = requests.get(url)
+  except requests.exceptions.ConnectionError:
+    logging.error("Cannot connect to url %s" % url)
   if not r.ok or not r.json(): 
-    sys.exit("cannot get quote from API")
-  pp( r.json()[0])
+    logging.error("Not 200 OK status for url %s" % url)
   return r.json()[0]
 
 def strip_html(q):
@@ -54,18 +62,21 @@ if __name__ == "__main__":
   # allow for more than one tweet
   if len(sys.argv) > 1:
     num_tweets = sys.argv[1]
+    try:
+      num_tweets = int(num_tweets)
+    except ValueError:
+      sys.exit("Please provide numeric first cli arg")
   tweets = []
   for i in range(num_tweets):
     tw = None
     try:
       tw = create_tweet(get_quote(url))
     except TweetTooLong as e:
-      sys.stderr.write(e)
+      logging.warning(e)
       continue
     tweets.append(tw)
 
   api = get_twitter_api()
   for tw in tweets:
-    print tw 
     api.update_status(tw) 
     time.sleep(2)
