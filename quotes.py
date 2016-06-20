@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-import HTMLParser
+try:
+  from HTMLParser import HTMLParser
+except ImportError:
+  from html.parser import HTMLParser
 import logging
 import re
 import requests
@@ -8,6 +11,13 @@ import time
 import tweepy
 from config import *
 
+class TwitterPost(object):
+  def __init__(self, auth):
+    self.api = tweepy.API(auth)
+  def post_tweet(self, status):
+    self.api.update_status(status)
+
+# exceptions
 class TweetTooLong(Exception):
   def __init__(self, value):
     self.value = value
@@ -20,7 +30,9 @@ class NoValidResponse(Exception):
   def __str__(self):
     return repr(self.value)
 
-html_parser = HTMLParser.HTMLParser()
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
+html_parser = HTMLParser()
 logging.basicConfig(filename=LOGFILE,
                     filemode='a',
                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
@@ -54,12 +66,6 @@ def create_tweet(q):
     raise TweetTooLong("Tweet cannot be longer than %d chars" % TWEET_LEN)
   return tweet + q['link']
 
-def get_twitter_api():
-  auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-  auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
-  return tweepy.API(auth)
-
-
 if __name__ == "__main__":
   tweets = []
   num_tweets = 1
@@ -84,7 +90,7 @@ if __name__ == "__main__":
       except TweetTooLong as e:
         logging.error(e)
 
-  api = get_twitter_api()
-  for tweet in tweets:
-    #api.update_status(tweet)
-    time.sleep(2)
+  for status in tweets:
+    ta = TwitterPost(auth)
+    ta.post_tweet(status)
+    time.sleep(1)
