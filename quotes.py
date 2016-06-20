@@ -61,7 +61,6 @@ def get_twitter_api():
 
 
 if __name__ == "__main__":
-  url = "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand" # api-v4-0
   tweets = []
   num_tweets = 1
 
@@ -75,7 +74,7 @@ if __name__ == "__main__":
   for i in range(num_tweets):
     quote = tweet = None
     try:
-      quote = get_quote(url)
+      quote = get_quote(URL)
     except NoValidResponse as e:
       logging.error(e)
     if quote: 
@@ -87,5 +86,5 @@ if __name__ == "__main__":
 
   api = get_twitter_api()
   for tweet in tweets:
-    api.update_status(tweet)
+    #api.update_status(tweet)
     time.sleep(2)

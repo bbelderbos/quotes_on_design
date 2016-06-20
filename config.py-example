@@ -1,3 +1,4 @@
+URL = "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand" # api-v4-0
 TWEET_LEN = 140 
 SHORT_URL_LEN = 23 
 ELLIPSIS = " ..."
