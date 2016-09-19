@@ -92,5 +92,8 @@ if __name__ == "__main__":
 
   for status in tweets:
     ta = TwitterPost(auth)
-    ta.post_tweet(status)
+    try:
+      ta.post_tweet(status)
+    except Exception as e:
+      logging.error(e)
     time.sleep(1)

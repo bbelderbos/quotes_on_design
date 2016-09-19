@@ -3,7 +3,7 @@ import mock
 import unittest
 
 class TestQuotes(unittest.TestCase):
-  
+
   def setUp(self):
     self.quote = "<p>In all affairs it&#8217;s a healthy thing now and then to hang a question mark on the things you have long taken for granted.  </p>\n"
     self.squote = "This is a short code"
@@ -12,7 +12,7 @@ class TestQuotes(unittest.TestCase):
       'content' : "some content",
       'link' : "http://bobbelderbos.com",
     }
- 
+
   def test_get_quote(self): 
     resp = get_quote(URL)
     self.assertIsInstance(resp, dict)
@@ -22,11 +22,11 @@ class TestQuotes(unittest.TestCase):
   def test_strip_html(self):
     quote_no_html = strip_html(self.quote) 
     self.assertEqual(quote_no_html[0:6], "In all")
-   
+
   def test_get_max_quote_len(self):
     max_len = get_max_quote_len(self.squote)
     self.assertEqual(max_len, 86)
-  
+
   def test_html_unescape(self):
     unesc_str = html_unescape(self.quote)
     self.assertIn("it's".replace("'", u'\u2019'), unesc_str)
@@ -45,5 +45,7 @@ class TestQuotes(unittest.TestCase):
     ta.post_tweet("Hello World!")
     mock_update_status.assert_called_with("Hello World!")
 
+
 if __name__ == "__main__":
   unittest.main()
+
